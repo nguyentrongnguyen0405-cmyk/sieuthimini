@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
         
-        \App\Models\Category::create(['name' => 'Đồ uống']);
-        \App\Models\Category::create(['name' => 'Bánh kẹo']);
-        \App\Models\Category::create(['name' => 'Gia vị']);
+        $this->call([
+            SampleDataSeeder::class
+        ]);
     }
 }
