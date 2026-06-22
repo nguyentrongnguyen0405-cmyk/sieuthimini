@@ -109,11 +109,13 @@
   font-weight: 600;
 }
 
-.pos-product-emoji {
-  font-size: 36px;
-  margin-bottom: 8px;
-  display: block;
-  line-height: 1.2;
+.pos-product-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  background: var(--bg-secondary);
 }
 
 .pos-product-name {
@@ -617,15 +619,12 @@
   gap: 12px;
 }
 
-.product-info-cell .product-emoji {
-  font-size: 28px;
+.product-info-cell .product-image {
   width: 40px;
   height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-secondary);
+  object-fit: cover;
   border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
   flex-shrink: 0;
 }
 

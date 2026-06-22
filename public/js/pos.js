@@ -6,12 +6,34 @@ MiniMart.POS = (function() {
   let searchQuery = '';
   let paymentMethod = 'cash';
   let discountPercent = 0;
+  let productsData = [];
+  let categoriesData = [];
 
-  function init() {}
+  function init() {
+    cart = [];
+    loadData();
+  }
+
+  async function loadData() {
+    try {
+      const [prodRes, catRes] = await Promise.all([
+        fetch('/api/products', { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), 'Accept': 'application/json' } }),
+        fetch('/api/categories', { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), 'Accept': 'application/json' } })
+      ]);
+      const prodData = await prodRes.json();
+      const catData = await catRes.json();
+      if (prodData.success) productsData = prodData.data;
+      if (catData.success) categoriesData = catData.data;
+      render();
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   function render() {
     const container = document.getElementById('page-pos');
-    const categories = MiniMart.Data.getCategories();
+    if (!container) return;
+    const categories = categoriesData;
 
     container.innerHTML = `
       <div class='pos-layout'>
@@ -61,17 +83,17 @@ MiniMart.POS = (function() {
   function renderProducts() {
     const grid = document.getElementById('posProductGrid');
     if (!grid) return;
-    let products = MiniMart.Data.getProducts().filter(p => p.status === 'active');
+    let products = productsData.filter(p => p.status === 'active');
     
-    if (selectedCategory !== 'all') products = products.filter(p => p.category === selectedCategory);
-    if (searchQuery) products = products.filter(p => p.name.toLowerCase().includes(searchQuery) || p.code.includes(searchQuery));
+    if (selectedCategory !== 'all') products = products.filter(p => p.category_id == selectedCategory);
+    if (searchQuery) products = products.filter(p => p.name.toLowerCase().includes(searchQuery) || (p.barcode && p.barcode.includes(searchQuery)));
 
     grid.innerHTML = products.map(p => `
-      <div class='pos-product-card ${p.stock === 0 ? "out-of-stock" : ""}' data-id='${p.id}'>
-        <span class='pos-product-emoji'>${p.image}</span>
+      <div class='pos-product-card ${p.stock_qty === 0 ? "out-of-stock" : ""}' data-id='${p.id}'>
+        <img src='${p.image_url || "https://placehold.co/100x100?text=SP"}' class='pos-product-image' alt='${p.name}'>
         <div class='pos-product-name'>${p.name}</div>
         <div class='pos-product-price'>${MiniMart.Utils.formatCurrency(p.price)}</div>
-        <div class='pos-product-stock'>${p.stock === 0 ? 'Hết hàng' : 'Còn ' + p.stock + ' ' + p.unit}</div>
+        <div class='pos-product-stock'>${p.stock_qty === 0 ? 'Hết hàng' : 'Còn ' + p.stock_qty + ' ' + (p.unit || '')}</div>
       </div>
     `).join('');
 
@@ -85,42 +107,43 @@ MiniMart.POS = (function() {
   }
 
   function addToCart(productId) {
-    const products = MiniMart.Data.getProducts();
-    const product = products.find(p => p.id === productId);
+    const products = productsData;
+    const product = products.find(p => p.id == productId);
     if (!product) return;
 
-    const existing = cart.find(item => item.productId === productId);
+    const existing = cart.find(item => item.productId == productId);
     if (existing) {
-      if (existing.quantity >= product.stock) {
+      if (existing.quantity >= product.stock_qty) {
         MiniMart.Utils.showToast('Số lượng vượt quá tồn kho!', 'error');
         return;
       }
       existing.quantity++;
-      existing.subtotal = existing.quantity * existing.price;
+      existing.subtotal = existing.quantity * parseFloat(product.price);
     } else {
+      const priceNum = parseFloat(product.price) || 0;
       cart.push({
         productId: product.id,
         name: product.name,
-        price: product.price,
+        price: priceNum,
         quantity: 1,
-        subtotal: product.price,
-        image: product.image
+        subtotal: priceNum,
+        image: product.image_url || "https://placehold.co/100x100?text=SP"
       });
     }
     renderCart();
   }
 
   function updateQuantity(productId, delta) {
-    const item = cart.find(i => i.productId === productId);
+    const item = cart.find(i => i.productId == productId);
     if (!item) return;
-    const product = MiniMart.Data.getProducts().find(p => p.id === productId);
+    const product = productsData.find(p => p.id == productId);
     
     item.quantity += delta;
     if (item.quantity <= 0) {
-      cart = cart.filter(i => i.productId !== productId);
-    } else if (product && item.quantity > product.stock) {
+      cart = cart.filter(i => i.productId != productId);
+    } else if (product && item.quantity > product.stock_qty) {
       MiniMart.Utils.showToast('Vượt quá tồn kho!', 'error');
-      item.quantity = product.stock;
+      item.quantity = product.stock_qty;
     }
     if (item.quantity > 0) item.subtotal = item.quantity * item.price;
     renderCart();
@@ -149,7 +172,7 @@ MiniMart.POS = (function() {
 
     itemsContainer.innerHTML = cart.map(item => `
       <div class='pos-cart-item'>
-        <span style='font-size:24px'>${item.image}</span>
+        <img src='${item.image}' alt='${item.name}' style='width:40px;height:40px;object-fit:cover;border-radius:4px;background:var(--bg-secondary)'>
         <div class='pos-cart-item-info'>
           <div class='pos-cart-item-name'>${item.name}</div>
           <div class='pos-cart-item-price'>${MiniMart.Utils.formatCurrency(item.price)}</div>
@@ -264,48 +287,72 @@ MiniMart.POS = (function() {
     }
   }
 
-  function processPayment(total, subtotal, discountAmount, cashReceived, change) {
+  async function processPayment(total, subtotal, discountAmount, cashReceived, change) {
     const user = MiniMart.Auth.getCurrentUser();
-    const invoices = MiniMart.Data.getInvoices();
-    const invoiceNumber = 'INV-' + String(invoices.length + 1).padStart(4, '0');
+    
+    // Convert cart items to API format
+    const items = cart.map(item => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      price: item.price
+    }));
 
-    const invoice = {
-      id: invoiceNumber,
-      items: cart.map(item => ({...item})),
-      subtotal,
+    const payload = {
+      items: items,
+      subtotal: subtotal,
       discount: discountAmount,
-      discountPercent,
-      total,
-      paymentMethod,
-      cashReceived,
-      change,
-      employeeId: user.id,
-      employeeName: user.fullName,
-      createdAt: new Date().toISOString(),
+      total: total,
+      paymentMethod: paymentMethod,
+      cashReceived: cashReceived,
+      change: change,
       customerName: 'Khách lẻ'
     };
 
-    MiniMart.Data.addInvoice(invoice);
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-    const products = MiniMart.Data.getProducts();
-    cart.forEach(item => {
-      const product = products.find(p => p.id === item.productId);
-      if (product) {
-        product.stock = Math.max(0, product.stock - item.quantity);
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message || 'Lỗi thanh toán');
       }
-    });
-    MiniMart.Data.setProducts(products);
 
-    MiniMart.Utils.closeModal();
-    showInvoiceReceipt(invoice);
+      // Success
+      MiniMart.Utils.closeModal();
+      showInvoiceReceipt(data.invoice);
 
-    cart = [];
-    discountPercent = 0;
-    renderProducts();
-    renderCart();
+      cart = [];
+      discountPercent = 0;
+      
+      // Reload products to get latest stock
+      if (MiniMart.Products && MiniMart.Products.loadData) {
+        await MiniMart.Products.loadData();
+      } else {
+        // Fallback reload page if module is not fully loaded
+        window.location.reload();
+      }
+      
+      renderProducts();
+      renderCart();
+
+    } catch (error) {
+      MiniMart.Utils.showToast(error.message, 'error');
+      console.error('Lỗi thanh toán:', error);
+    }
   }
 
+  let currentInvoiceToPrint = null;
+
   function showInvoiceReceipt(invoice) {
+    currentInvoiceToPrint = invoice;
     const paymentLabels = { cash: 'Tiền mặt', transfer: 'Chuyển khoản', ewallet: 'Ví điện tử' };
     MiniMart.Utils.showModal(`
       <div class='modal-header'><h3>✅ Thanh toán thành công!</h3><button class='modal-close' onclick='MiniMart.Utils.closeModal()'>✕</button></div>
@@ -338,15 +385,15 @@ MiniMart.POS = (function() {
       </div>
       <div class='modal-footer'>
         <button class='btn btn-secondary' onclick='MiniMart.Utils.closeModal()'>Đóng</button>
-        <button class='btn btn-primary' onclick='MiniMart.POS.printInvoice("${invoice.id}")'>🖨️ In hóa đơn</button>
+        <button class='btn btn-primary' onclick='MiniMart.POS.printInvoice()'>🖨️ In hóa đơn</button>
       </div>
     `);
 
     MiniMart.Utils.showToast('Thanh toán thành công!', 'success');
   }
 
-  function printInvoice(invoiceId) {
-    const invoice = MiniMart.Data.getInvoices().find(inv => inv.id === invoiceId);
+  function printInvoice() {
+    const invoice = currentInvoiceToPrint;
     if (!invoice) return;
     const printArea = document.getElementById('invoicePrint');
     if (!printArea) return;

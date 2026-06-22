@@ -6,22 +6,58 @@ MiniMart.Inventory = (function () {
   let searchQuery = '';
   let filterStock = 'all'; // 'all', 'low', 'out'
 
+  let stockEntriesData = [];
+  let productsData = [];
+
   function init() {
     searchQuery = '';
     filterStock = 'all';
+    loadData();
+  }
+
+  async function loadData() {
+    try {
+      const [productsRes, stockRes] = await Promise.all([
+        fetch('/api/products', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+          }
+        }),
+        fetch('/api/stock-entries', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+          }
+        })
+      ]);
+
+      const productsDataResponse = await productsRes.json();
+      const stockDataResponse = await stockRes.json();
+
+      if (productsDataResponse.success) {
+        productsData = productsDataResponse.data.filter(p => p.status === 'active');
+      }
+      if (stockDataResponse.success) {
+        stockEntriesData = stockDataResponse.data;
+      }
+      render();
+    } catch (error) {
+      console.error('Error loading inventory:', error);
+    }
   }
 
   function render() {
     var container = document.getElementById('page-inventory');
     if (!container) return;
 
-    var products = MiniMart.Data.getProducts().filter(function (p) { return p.status === 'active'; });
+    var products = productsData;
 
     var totalProducts = products.length;
-    var inStockCount = products.filter(function (p) { return p.stock > 10; }).length;
-    var lowStockCount = products.filter(function (p) { return p.stock > 0 && p.stock <= 10; }).length;
-    var outOfStockCount = products.filter(function (p) { return p.stock === 0; }).length;
-    var totalValue = products.reduce(function (sum, p) { return sum + (p.costPrice * p.stock); }, 0);
+    var inStockCount = products.filter(function (p) { return p.stock_qty > 10; }).length;
+    var lowStockCount = products.filter(function (p) { return p.stock_qty > 0 && p.stock_qty <= 10; }).length;
+    var outOfStockCount = products.filter(function (p) { return p.stock_qty === 0; }).length;
+    var totalValue = products.reduce(function (sum, p) { return sum + (p.import_price * p.stock_qty); }, 0);
 
     container.innerHTML =
       '<div class="page-header">' +
@@ -111,7 +147,7 @@ MiniMart.Inventory = (function () {
     var tbody = document.getElementById('inventoryTableBody');
     if (!tbody) return;
 
-    var products = MiniMart.Data.getProducts().filter(function (p) { return p.status === 'active'; });
+    var products = productsData;
     var categories = MiniMart.Data.getCategories();
     var catMap = {};
     categories.forEach(function (c) { catMap[c.id] = c; });
@@ -120,15 +156,15 @@ MiniMart.Inventory = (function () {
     if (searchQuery) {
       products = products.filter(function (p) {
         return p.name.toLowerCase().indexOf(searchQuery) !== -1 ||
-               p.code.toLowerCase().indexOf(searchQuery) !== -1;
+               (p.barcode && p.barcode.toLowerCase().indexOf(searchQuery) !== -1);
       });
     }
 
     // Apply stock filter
     if (filterStock === 'low') {
-      products = products.filter(function (p) { return p.stock > 0 && p.stock <= 10; });
+      products = products.filter(function (p) { return p.stock_qty > 0 && p.stock_qty <= 10; });
     } else if (filterStock === 'out') {
-      products = products.filter(function (p) { return p.stock === 0; });
+      products = products.filter(function (p) { return p.stock_qty === 0; });
     }
 
     if (products.length === 0) {
@@ -143,15 +179,15 @@ MiniMart.Inventory = (function () {
     }
 
     tbody.innerHTML = products.map(function (p) {
-      var cat = catMap[p.category];
-      var catName = cat ? (cat.icon + ' ' + cat.name) : (p.category || '');
-      var value = p.costPrice * p.stock;
+      var cat = catMap[p.category_id];
+      var catName = cat ? (cat.icon + ' ' + cat.name) : 'Chưa phân loại';
+      var value = p.import_price * p.stock_qty;
 
       var stockClass, statusBadge;
-      if (p.stock <= 0) {
+      if (p.stock_qty <= 0) {
         stockClass = 'red';
         statusBadge = '<span class="badge badge-danger">Hết hàng</span>';
-      } else if (p.stock <= 10) {
+      } else if (p.stock_qty <= 10) {
         stockClass = 'yellow';
         statusBadge = '<span class="badge badge-warning">Sắp hết</span>';
       } else {
@@ -160,12 +196,12 @@ MiniMart.Inventory = (function () {
       }
 
       return '<tr>' +
-        '<td><span class="product-image-preview">' + (p.image || '📦') + '</span></td>' +
-        '<td><strong>' + escapeHtml(p.name) + '</strong><br><small class="text-muted">' + escapeHtml(p.code) + '</small></td>' +
+        '<td><img src="' + escapeAttr(p.image_url || 'https://placehold.co/100x100?text=SP') + '" alt="' + escapeAttr(p.name) + '" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover; display: block; border: 1px solid var(--border-color)"></td>' +
+        '<td><strong>' + escapeHtml(p.name) + '</strong><br><small class="text-muted">' + escapeHtml(p.barcode) + '</small></td>' +
         '<td>' + escapeHtml(catName) + '</td>' +
-        '<td><div class="flex" style="align-items:center;gap:6px"><span class="stock-indicator ' + stockClass + '"></span><strong>' + p.stock + '</strong></div></td>' +
+        '<td><div class="flex" style="align-items:center;gap:6px"><span class="stock-indicator ' + stockClass + '"></span><strong>' + p.stock_qty + '</strong></div></td>' +
         '<td>' + escapeHtml(p.unit || '') + '</td>' +
-        '<td class="text-right">' + MiniMart.Utils.formatCurrency(p.costPrice) + '</td>' +
+        '<td class="text-right">' + MiniMart.Utils.formatCurrency(p.import_price) + '</td>' +
         '<td class="text-right">' + MiniMart.Utils.formatCurrency(value) + '</td>' +
         '<td>' + statusBadge + '</td>' +
       '</tr>';
@@ -176,7 +212,7 @@ MiniMart.Inventory = (function () {
     var tbody = document.getElementById('stockHistoryBody');
     if (!tbody) return;
 
-    var entries = MiniMart.Data.getStockEntries();
+    var entries = stockEntriesData;
     // Show latest 20 entries
     var recentEntries = entries.slice().sort(function (a, b) {
       return new Date(b.createdAt) - new Date(a.createdAt);
@@ -212,7 +248,10 @@ MiniMart.Inventory = (function () {
   function showStockModal(type) {
     var isImport = type === 'import';
     var title = isImport ? '📥 Nhập hàng' : '📤 Xuất hàng';
-    var products = MiniMart.Data.getProducts().filter(function (p) { return p.status === 'active'; });
+    var products = productsData;
+    var categories = MiniMart.Data.getCategories();
+    var catMap = {};
+    categories.forEach(function (c) { catMap[c.id] = c; });
 
     var html =
       '<div class="modal-header">' +
@@ -226,7 +265,9 @@ MiniMart.Inventory = (function () {
             '<select class="form-select" id="sf_product" required>' +
               '<option value="">-- Chọn sản phẩm --</option>' +
               products.map(function (p) {
-                return '<option value="' + p.id + '">' + (p.image || '📦') + ' ' + escapeHtml(p.name) + ' (Tồn kho: ' + p.stock + ' ' + escapeHtml(p.unit || '') + ')</option>';
+                var cat = catMap[p.category_id];
+                var icon = cat ? cat.icon : '📦';
+                return '<option value="' + p.id + '">' + icon + ' ' + escapeHtml(p.name) + ' (Tồn kho: ' + p.stock_qty + ' ' + escapeHtml(p.unit || '') + ')</option>';
               }).join('') +
             '</select>' +
           '</div>' +
@@ -267,7 +308,7 @@ MiniMart.Inventory = (function () {
     }, 50);
   }
 
-  function saveStockEntry(type) {
+  async function saveStockEntry(type) {
     var isImport = type === 'import';
     var productId = document.getElementById('sf_product').value;
     var quantity = parseInt(document.getElementById('sf_quantity').value, 10);
@@ -282,53 +323,34 @@ MiniMart.Inventory = (function () {
       return;
     }
 
-    var products = MiniMart.Data.getProducts();
-    var product = products.find(function (p) { return p.id === productId; });
-
-    if (!product) {
-      MiniMart.Utils.showToast('Không tìm thấy sản phẩm', 'error');
-      return;
-    }
-
-    // For export, check stock availability
-    if (!isImport && product.stock < quantity) {
-      MiniMart.Utils.showToast('Số lượng xuất vượt quá tồn kho hiện tại (' + product.stock + ')', 'error');
-      return;
-    }
-
-    // Update product stock
-    var newStock = isImport ? product.stock + quantity : product.stock - quantity;
-    products = products.map(function (p) {
-      if (p.id === productId) {
-        return Object.assign({}, p, { stock: newStock });
-      }
-      return p;
-    });
-    MiniMart.Data.setProducts(products);
-
-    // Add stock entry
-    var currentUser = MiniMart.Auth.getCurrentUser();
-    var entry = {
-      id: MiniMart.Data.generateId(),
-      productId: productId,
-      productName: product.name,
+    var payload = {
+      product_id: productId,
+      type: type,
       quantity: quantity,
-      type: isImport ? 'import' : 'export',
-      note: note,
-      createdAt: new Date().toISOString(),
-      createdBy: currentUser ? currentUser.fullName : 'Nhân viên'
+      note: note
     };
 
-    MiniMart.Data.addStockEntry(entry);
+    try {
+      const response = await fetch('/api/stock-entries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || 'Lỗi lưu phiếu kho');
+      }
 
-    MiniMart.Utils.closeModal();
-    MiniMart.Utils.showToast(
-      (isImport ? 'Nhập hàng thành công: +' : 'Xuất hàng thành công: -') + quantity + ' ' + escapeHtml(product.name),
-      'success'
-    );
-
-    // Re-render entire page to update stats
-    render();
+      MiniMart.Utils.closeModal();
+      MiniMart.Utils.showToast(data.message, 'success');
+      loadData();
+    } catch (e) {
+      MiniMart.Utils.showToast(e.message, 'error');
+    }
   }
 
   // --- Utility helpers ---

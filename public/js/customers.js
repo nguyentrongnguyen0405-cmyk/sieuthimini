@@ -8,17 +8,38 @@ MiniMart.Customers = (function () {
   let currentPage = 1;
   const perPage = 10;
 
+  let customersData = [];
+
   function init() {
     searchQuery = '';
     filterTier = 'all';
     currentPage = 1;
+    loadData();
+  }
+
+  async function loadData() {
+    try {
+      const response = await fetch('/api/customers', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        customersData = data.data;
+        render();
+      }
+    } catch (error) {
+      console.error('Error loading customers:', error);
+    }
   }
 
   function render() {
     const container = document.getElementById('page-customers');
     if (!container) return;
 
-    const customers = MiniMart.Data.getCustomers();
+    const customers = customersData;
     const stats = getCustomerStats(customers);
 
     container.innerHTML =
@@ -105,7 +126,7 @@ MiniMart.Customers = (function () {
   }
 
   function getFilteredCustomers() {
-    var customers = MiniMart.Data.getCustomers();
+    var customers = customersData;
 
     return customers.filter(function (c) {
       if (searchQuery) {
@@ -185,7 +206,7 @@ MiniMart.Customers = (function () {
     tbody.querySelectorAll('.btn-edit-customer').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var id = this.getAttribute('data-id');
-        var customers = MiniMart.Data.getCustomers();
+        var customers = customersData;
         var customer = customers.find(function (c) { return c.id === id; });
         if (customer) showCustomerForm(customer);
       });
@@ -317,7 +338,7 @@ MiniMart.Customers = (function () {
     }, 50);
   }
 
-  function saveCustomer(editId) {
+  async function saveCustomer(editId) {
     var name = document.getElementById('cf_name').value.trim();
     var phone = document.getElementById('cf_phone').value.trim();
     var email = document.getElementById('cf_email').value.trim();
@@ -327,67 +348,43 @@ MiniMart.Customers = (function () {
     var birthday = document.getElementById('cf_birthday').value;
     var notes = document.getElementById('cf_notes').value.trim();
 
-    if (!name) {
-      MiniMart.Utils.showToast('Vui lòng nhập họ tên khách hàng', 'error');
-      document.getElementById('cf_name').focus();
-      return;
-    }
-    if (!phone) {
-      MiniMart.Utils.showToast('Vui lòng nhập số điện thoại', 'error');
-      document.getElementById('cf_phone').focus();
-      return;
-    }
-    if (!/^[0-9]{9,11}$/.test(phone)) {
-      MiniMart.Utils.showToast('Số điện thoại không hợp lệ (9-11 số)', 'error');
-      document.getElementById('cf_phone').focus();
+    if (!name || !phone) {
+      MiniMart.Utils.showToast('Vui lòng nhập tên và số điện thoại', 'error');
       return;
     }
 
-    var customers = MiniMart.Data.getCustomers();
+    var payload = {
+      name: name, phone: phone, email: email, address: address,
+      tier: tier, points: points, birthday: birthday, notes: notes
+    };
 
-    // Check duplicate phone
-    var dupPhone = customers.find(function (c) {
-      return c.phone === phone && c.id !== editId;
-    });
-    if (dupPhone) {
-      MiniMart.Utils.showToast('Số điện thoại đã được đăng ký cho khách hàng khác', 'error');
-      document.getElementById('cf_phone').focus();
-      return;
-    }
+    var url = editId ? '/api/customers/' + editId : '/api/customers';
+    var method = editId ? 'PUT' : 'POST';
 
-    if (editId) {
-      customers = customers.map(function (c) {
-        if (c.id === editId) {
-          return Object.assign({}, c, {
-            name: name, phone: phone, email: email, address: address,
-            tier: tier, points: points, birthday: birthday, notes: notes,
-            updatedAt: new Date().toISOString()
-          });
-        }
-        return c;
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
-      MiniMart.Data.setCustomers(customers);
-      MiniMart.Utils.showToast('Cập nhật khách hàng thành công!', 'success');
-    } else {
-      var newCustomer = {
-        id: MiniMart.Data.generateId(),
-        name: name, phone: phone, email: email, address: address,
-        tier: tier, points: points, birthday: birthday, notes: notes,
-        totalSpent: 0, orderCount: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      customers.push(newCustomer);
-      MiniMart.Data.setCustomers(customers);
-      MiniMart.Utils.showToast('Thêm khách hàng thành công!', 'success');
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || 'Lỗi lưu khách hàng');
+      }
+      MiniMart.Utils.showToast(data.message, 'success');
+      MiniMart.Utils.closeModal();
+      loadData();
+    } catch (e) {
+      MiniMart.Utils.showToast(e.message, 'error');
     }
-
-    MiniMart.Utils.closeModal();
-    render();
   }
 
   function viewCustomer(customerId) {
-    var customers = MiniMart.Data.getCustomers();
+    var customers = customersData;
     var c = customers.find(function (cust) { return cust.id === customerId; });
     if (!c) return;
 
@@ -458,14 +455,25 @@ MiniMart.Customers = (function () {
     MiniMart.Utils.showModal(html);
   }
 
-  function deleteCustomer(customerId) {
+  async function deleteCustomer(customerId) {
     if (!MiniMart.Utils.confirmDialog('Bạn có chắc chắn muốn xóa khách hàng này?')) return;
 
-    var customers = MiniMart.Data.getCustomers();
-    customers = customers.filter(function (c) { return c.id !== customerId; });
-    MiniMart.Data.setCustomers(customers);
-    MiniMart.Utils.showToast('Đã xóa khách hàng', 'success');
-    render();
+    try {
+      const response = await fetch('/api/customers/' + customerId, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        }
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message);
+      
+      MiniMart.Utils.showToast('Đã xóa khách hàng', 'success');
+      loadData();
+    } catch (e) {
+      MiniMart.Utils.showToast(e.message, 'error');
+    }
   }
 
   // --- Utility helpers ---

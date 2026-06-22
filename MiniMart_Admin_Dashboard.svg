@@ -1,0 +1,80 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Nền Dark Mode -->
+    <rect width="1440" height="900" fill="#0F172A"/>
+
+    <!-- Sidebar Trái -->
+    <rect width="250" height="900" fill="#1E293B"/>
+    <text x="30" y="50" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="22" font-weight="bold">Admin Panel</text>
+    
+    <!-- Menu Items -->
+    <rect x="15" y="90" width="220" height="50" rx="8" fill="#6366F1"/>
+    <text x="30" y="122" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16" font-weight="bold">📊 Bảng điều khiển</text>
+    <text x="30" y="182" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">📦 Quản lý Sản phẩm</text>
+    <text x="30" y="242" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">🏠 Quản lý Tồn kho</text>
+    <text x="30" y="302" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">👥 Quản lý Khách hàng</text>
+    <text x="30" y="362" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">🧾 Lịch sử Hóa đơn</text>
+
+    <!-- Main Content -->
+    <text x="290" y="60" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="28" font-weight="bold">Tổng quan doanh thu</text>
+    <text x="290" y="90" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">Cập nhật hôm nay: 27/05/2026</text>
+
+    <!-- 4 KPI Cards -->
+    <rect x="290" y="120" width="260" height="120" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="310" y="160" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Tổng Doanh Thu</text>
+    <text x="310" y="200" fill="#10B981" font-family="Arial, sans-serif" font-size="28" font-weight="bold">15.450.000 đ</text>
+
+    <rect x="570" y="120" width="260" height="120" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="590" y="160" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Số Đơn Hàng</text>
+    <text x="590" y="200" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="28" font-weight="bold">142 Đơn</text>
+
+    <rect x="850" y="120" width="260" height="120" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="870" y="160" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Khách hàng Mới</text>
+    <text x="870" y="200" fill="#3B82F6" font-family="Arial, sans-serif" font-size="28" font-weight="bold">+ 24 VIP</text>
+
+    <rect x="1130" y="120" width="260" height="120" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="1150" y="160" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Cảnh báo Tồn Kho</text>
+    <text x="1150" y="200" fill="#F43F5E" font-family="Arial, sans-serif" font-size="28" font-weight="bold">5 SP Sắp hết</text>
+
+    <!-- Biểu đồ Chart Khổng lồ -->
+    <rect x="290" y="270" width="1100" height="350" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="320" y="310" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Biểu đồ doanh thu 7 ngày qua</text>
+    <!-- Trục X/Y -->
+    <rect x="350" y="350" width="2" height="230" fill="#475569"/>
+    <rect x="350" y="580" width="980" height="2" fill="#475569"/>
+    
+    <!-- Cột Biểu Đồ (Bar Chart) -->
+    <rect x="400" y="450" width="60" height="130" rx="4" fill="#6366F1"/>
+    <rect x="520" y="380" width="60" height="200" rx="4" fill="#6366F1"/>
+    <rect x="640" y="480" width="60" height="100" rx="4" fill="#6366F1"/>
+    <rect x="760" y="420" width="60" height="160" rx="4" fill="#6366F1"/>
+    <rect x="880" y="350" width="60" height="230" rx="4" fill="#10B981"/> <!-- Đỉnh cao -->
+    <rect x="1000" y="460" width="60" height="120" rx="4" fill="#6366F1"/>
+    <rect x="1120" y="500" width="60" height="80" rx="4" fill="#6366F1"/>
+
+    <!-- Lịch sử giao dịch gần đây -->
+    <rect x="290" y="650" width="1100" height="220" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="320" y="690" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Giao dịch mới nhất</text>
+    
+    <!-- Table Header -->
+    <text x="320" y="740" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">Mã Đơn</text>
+    <text x="450" y="740" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">Khách Hàng</text>
+    <text x="700" y="740" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">Tổng Tiền</text>
+    <text x="900" y="740" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">Thanh Toán</text>
+    <text x="1100" y="740" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">Trạng Thái</text>
+
+    <!-- Row 1 -->
+    <text x="320" y="780" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">ONL-8821</text>
+    <text x="450" y="780" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">0901234567 (VIP)</text>
+    <text x="700" y="780" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">145.000 đ</text>
+    <rect x="895" y="760" width="80" height="30" rx="15" fill="#3B82F6"/>
+    <text x="910" y="780" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14">VietQR</text>
+    <text x="1100" y="780" fill="#10B981" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Hoàn tất</text>
+
+    <!-- Row 2 -->
+    <text x="320" y="820" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">INV-8822</text>
+    <text x="450" y="820" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Khách lẻ tại quầy</text>
+    <text x="700" y="820" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">22.000 đ</text>
+    <rect x="895" y="800" width="80" height="30" rx="15" fill="#64748B"/>
+    <text x="910" y="820" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14">Tiền mặt</text>
+    <text x="1100" y="820" fill="#10B981" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Hoàn tất</text>
+</svg>

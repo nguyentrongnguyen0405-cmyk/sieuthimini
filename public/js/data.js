@@ -8,7 +8,7 @@ MiniMart.Data = (function() {
     STOCK_ENTRIES: 'minimart_stock_entries',
     CUSTOMERS: 'minimart_customers',
     CURRENT_USER: 'minimart_current_user',
-    INITIALIZED: 'minimart_initialized_v2'
+    INITIALIZED: 'minimart_initialized_v3'
   };
 
   const categories = [
@@ -23,37 +23,37 @@ MiniMart.Data = (function() {
   ];
 
   const sampleProducts = [
-    { id: 'P001', name: 'Gạo ST25 (5kg)', code: '8934563001', category: 'thuc-pham', price: 125000, costPrice: 100000, stock: 45, unit: 'Bao', image: '🍚', status: 'active' },
-    { id: 'P002', name: 'Nước mắm Nam Ngư 500ml', code: '8934563002', category: 'gia-vi', price: 32000, costPrice: 25000, stock: 80, unit: 'Chai', image: '🫗', status: 'active' },
-    { id: 'P003', name: 'Bia Tiger (Thùng 24 lon)', code: '8934563003', category: 'do-uong', price: 350000, costPrice: 320000, stock: 10, unit: 'Thùng', image: '🍺', status: 'active' },
-    { id: 'P004', name: 'Sữa tươi Vinamilk 1L', code: '8934563004', category: 'sua', price: 35000, costPrice: 28000, stock: 120, unit: 'Hộp', image: '🥛', status: 'active' },
-    { id: 'P005', name: 'Mì Hảo Hảo (Thùng 30 gói)', code: '8934563005', category: 'thuc-pham', price: 100000, costPrice: 85000, stock: 50, unit: 'Thùng', image: '🍜', status: 'active' },
-    { id: 'P006', name: 'Dầu ăn Simply 1L', code: '8934563006', category: 'gia-vi', price: 45000, costPrice: 38000, stock: 60, unit: 'Chai', image: '🏺', status: 'active' },
-    { id: 'P007', name: 'Bột giặt OMO 3kg', code: '8934563007', category: 'do-dung', price: 120000, costPrice: 100000, stock: 5, unit: 'Túi', image: '🧼', status: 'active' },
-    { id: 'P008', name: 'Bánh ChocoPie 12 cái', code: '8934563008', category: 'banh-keo', price: 55000, costPrice: 45000, stock: 30, unit: 'Hộp', image: '🍫', status: 'active' },
-    { id: 'P009', name: 'Nước rửa chén Sunlight 4kg', code: '8934563009', category: 'do-dung', price: 95000, costPrice: 80000, stock: 0, unit: 'Can', image: '🧴', status: 'active' },
-    { id: 'P010', name: 'Trứng gà (Vỉ 10 quả)', code: '8934563010', category: 'thuc-pham', price: 30000, costPrice: 24000, stock: 40, unit: 'Vỉ', image: '🥚', status: 'active' },
-    { id: 'P011', name: 'Thịt bò (1kg)', code: '8934563011', category: 'thit-ca', price: 250000, costPrice: 200000, stock: 15, unit: 'Kg', image: '🥩', status: 'active' },
-    { id: 'P012', name: 'Rau muống', code: '8934563012', category: 'rau-cu', price: 15000, costPrice: 8000, stock: 2, unit: 'Bó', image: '🥬', status: 'active' },
-    { id: 'P013', name: 'Coca Cola 1.5L', code: '8934563013', category: 'do-uong', price: 20000, costPrice: 15000, stock: 100, unit: 'Chai', image: '🥤', status: 'active' },
-    { id: 'P014', name: 'Đường tinh luyện Biên Hòa 1kg', code: '8934563014', category: 'gia-vi', price: 22000, costPrice: 18000, stock: 80, unit: 'Gói', image: '🧂', status: 'active' },
-    { id: 'P015', name: 'Sữa chua Vinamilk (Lốc 4 hộp)', code: '8934563015', category: 'sua', price: 24000, costPrice: 19000, stock: 60, unit: 'Lốc', image: '🍧', status: 'active' },
-    { id: 'P016', name: 'Nước suối Aquafina 500ml', code: '8934563016', category: 'do-uong', price: 5000, costPrice: 3500, stock: 200, unit: 'Chai', image: '💧', status: 'active' },
-    { id: 'P017', name: 'Giấy vệ sinh Watersilk (Lốc 10 cuộn)', code: '8934563017', category: 'do-dung', price: 60000, costPrice: 50000, stock: 40, unit: 'Lốc', image: '🧻', status: 'active' },
-    { id: 'P018', name: 'Bánh mì sandwich', code: '8934563018', category: 'thuc-pham', price: 20000, costPrice: 15000, stock: 10, unit: 'Gói', image: '🍞', status: 'active' },
-    { id: 'P019', name: 'Kem đánh răng P/S 230g', code: '8934563019', category: 'do-dung', price: 35000, costPrice: 28000, stock: 50, unit: 'Tuýp', image: '🪥', status: 'active' },
-    { id: 'P020', name: 'Dầu gội Clear 630g', code: '8934563020', category: 'do-dung', price: 150000, costPrice: 130000, stock: 25, unit: 'Chai', image: '🧴', status: 'active' },
-    { id: 'P021', name: 'Kẹo dẻo Chupa Chups', code: '8934563021', category: 'banh-keo', price: 15000, costPrice: 10000, stock: 100, unit: 'Gói', image: '🍬', status: 'active' },
-    { id: 'P022', name: 'Cà phê G7 3in1 (Hộp 21 gói)', code: '8934563022', category: 'do-uong', price: 55000, costPrice: 45000, stock: 45, unit: 'Hộp', image: '☕', status: 'active' },
-    { id: 'P023', name: 'Nước tương Chinsu 250ml', code: '8934563023', category: 'gia-vi', price: 15000, costPrice: 11000, stock: 70, unit: 'Chai', image: '🫗', status: 'active' },
-    { id: 'P024', name: 'Cà rốt', code: '8934563024', category: 'rau-cu', price: 25000, costPrice: 18000, stock: 3, unit: 'Kg', image: '🥕', status: 'active' },
-    { id: 'P025', name: 'Táo Mỹ', code: '8934563025', category: 'rau-cu', price: 80000, costPrice: 60000, stock: 20, unit: 'Kg', image: '🍎', status: 'active' },
-    { id: 'P026', name: 'Chuối', code: '8934563026', category: 'rau-cu', price: 20000, costPrice: 12000, stock: 15, unit: 'Nải', image: '🍌', status: 'active' },
-    { id: 'P027', name: 'Bánh Oreo', code: '8934563027', category: 'banh-keo', price: 18000, costPrice: 14000, stock: 60, unit: 'Cây', image: '🍪', status: 'active' },
-    { id: 'P028', name: 'Xúc xích Vissan', code: '8934563028', category: 'thuc-pham', price: 25000, costPrice: 20000, stock: 50, unit: 'Gói', image: '🌭', status: 'active' },
-    { id: 'P029', name: 'Phô mai Bò cười', code: '8934563029', category: 'sua', price: 40000, costPrice: 32000, stock: 40, unit: 'Hộp', image: '🧀', status: 'active' },
-    { id: 'P030', name: 'Mì Ý', code: '8934563030', category: 'thuc-pham', price: 35000, costPrice: 28000, stock: 0, unit: 'Gói', image: '🍝', status: 'active' },
-    { id: 'P031', name: 'Cá hộp 3 Cô Gái', code: '8934563031', category: 'thuc-pham', price: 20000, costPrice: 16000, stock: 35, unit: 'Hộp', image: '🐟', status: 'active' }
+    { id: 'P001', name: 'Gạo ST25 (5kg)', code: '8934563001', category: 'thuc-pham', price: 125000, costPrice: 100000, stock: 45, unit: 'Bao', image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&q=80', status: 'active' },
+    { id: 'P002', name: 'Nước mắm Nam Ngư 500ml', code: '8934563002', category: 'gia-vi', price: 32000, costPrice: 25000, stock: 80, unit: 'Chai', image: 'https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?w=200&q=80', status: 'active' },
+    { id: 'P003', name: 'Bia Tiger (Thùng 24 lon)', code: '8934563003', category: 'do-uong', price: 350000, costPrice: 320000, stock: 10, unit: 'Thùng', image: 'https://images.unsplash.com/photo-1605548230624-8d2d0419c517?w=200&q=80', status: 'active' },
+    { id: 'P004', name: 'Sữa tươi Vinamilk 1L', code: '8934563004', category: 'sua', price: 35000, costPrice: 28000, stock: 120, unit: 'Hộp', image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200&q=80', status: 'active' },
+    { id: 'P005', name: 'Mì Hảo Hảo (Thùng 30 gói)', code: '8934563005', category: 'thuc-pham', price: 100000, costPrice: 85000, stock: 50, unit: 'Thùng', image: 'https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?w=200&q=80', status: 'active' },
+    { id: 'P006', name: 'Dầu ăn Simply 1L', code: '8934563006', category: 'gia-vi', price: 45000, costPrice: 38000, stock: 60, unit: 'Chai', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200&q=80', status: 'active' },
+    { id: 'P007', name: 'Bột giặt OMO 3kg', code: '8934563007', category: 'do-dung', price: 120000, costPrice: 100000, stock: 5, unit: 'Túi', image: 'https://images.unsplash.com/photo-1584820927498-cafe6c1c8774?w=200&q=80', status: 'active' },
+    { id: 'P008', name: 'Bánh ChocoPie 12 cái', code: '8934563008', category: 'banh-keo', price: 55000, costPrice: 45000, stock: 30, unit: 'Hộp', image: 'https://images.unsplash.com/photo-1582293041079-7814c2f12063?w=200&q=80', status: 'active' },
+    { id: 'P009', name: 'Nước rửa chén Sunlight 4kg', code: '8934563009', category: 'do-dung', price: 95000, costPrice: 80000, stock: 0, unit: 'Can', image: 'https://images.unsplash.com/photo-1584820927498-cafe6c1c8774?w=200&q=80', status: 'active' },
+    { id: 'P010', name: 'Trứng gà (Vỉ 10 quả)', code: '8934563010', category: 'thuc-pham', price: 30000, costPrice: 24000, stock: 40, unit: 'Vỉ', image: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=200&q=80', status: 'active' },
+    { id: 'P011', name: 'Thịt bò (1kg)', code: '8934563011', category: 'thit-ca', price: 250000, costPrice: 200000, stock: 15, unit: 'Kg', image: 'https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=200&q=80', status: 'active' },
+    { id: 'P012', name: 'Rau muống', code: '8934563012', category: 'rau-cu', price: 15000, costPrice: 8000, stock: 2, unit: 'Bó', image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=200&q=80', status: 'active' },
+    { id: 'P013', name: 'Coca Cola 1.5L', code: '8934563013', category: 'do-uong', price: 20000, costPrice: 15000, stock: 100, unit: 'Chai', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&q=80', status: 'active' },
+    { id: 'P014', name: 'Đường tinh luyện Biên Hòa 1kg', code: '8934563014', category: 'gia-vi', price: 22000, costPrice: 18000, stock: 80, unit: 'Gói', image: 'https://images.unsplash.com/photo-1624460113854-5264b971a2fc?w=200&q=80', status: 'active' },
+    { id: 'P015', name: 'Sữa chua Vinamilk (Lốc 4 hộp)', code: '8934563015', category: 'sua', price: 24000, costPrice: 19000, stock: 60, unit: 'Lốc', image: 'https://images.unsplash.com/photo-1574722772633-e401c33eb317?w=200&q=80', status: 'active' },
+    { id: 'P016', name: 'Nước suối Aquafina 500ml', code: '8934563016', category: 'do-uong', price: 5000, costPrice: 3500, stock: 200, unit: 'Chai', image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=200&q=80', status: 'active' },
+    { id: 'P017', name: 'Giấy vệ sinh Watersilk (Lốc 10 cuộn)', code: '8934563017', category: 'do-dung', price: 60000, costPrice: 50000, stock: 40, unit: 'Lốc', image: 'https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=200&q=80', status: 'active' },
+    { id: 'P018', name: 'Bánh mì sandwich', code: '8934563018', category: 'thuc-pham', price: 20000, costPrice: 15000, stock: 10, unit: 'Gói', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&q=80', status: 'active' },
+    { id: 'P019', name: 'Kem đánh răng P/S 230g', code: '8934563019', category: 'do-dung', price: 35000, costPrice: 28000, stock: 50, unit: 'Tuýp', image: 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=200&q=80', status: 'active' },
+    { id: 'P020', name: 'Dầu gội Clear 630g', code: '8934563020', category: 'do-dung', price: 150000, costPrice: 130000, stock: 25, unit: 'Chai', image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=200&q=80', status: 'active' },
+    { id: 'P021', name: 'Kẹo dẻo Chupa Chups', code: '8934563021', category: 'banh-keo', price: 15000, costPrice: 10000, stock: 100, unit: 'Gói', image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=200&q=80', status: 'active' },
+    { id: 'P022', name: 'Cà phê G7 3in1 (Hộp 21 gói)', code: '8934563022', category: 'do-uong', price: 55000, costPrice: 45000, stock: 45, unit: 'Hộp', image: 'https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=200&q=80', status: 'active' },
+    { id: 'P023', name: 'Nước tương Chinsu 250ml', code: '8934563023', category: 'gia-vi', price: 15000, costPrice: 11000, stock: 70, unit: 'Chai', image: 'https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?w=200&q=80', status: 'active' },
+    { id: 'P024', name: 'Cà rốt', code: '8934563024', category: 'rau-cu', price: 25000, costPrice: 18000, stock: 3, unit: 'Kg', image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=200&q=80', status: 'active' },
+    { id: 'P025', name: 'Táo Mỹ', code: '8934563025', category: 'rau-cu', price: 80000, costPrice: 60000, stock: 20, unit: 'Kg', image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6faa6?w=200&q=80', status: 'active' },
+    { id: 'P026', name: 'Chuối', code: '8934563026', category: 'rau-cu', price: 20000, costPrice: 12000, stock: 15, unit: 'Nải', image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=200&q=80', status: 'active' },
+    { id: 'P027', name: 'Bánh Oreo', code: '8934563027', category: 'banh-keo', price: 18000, costPrice: 14000, stock: 60, unit: 'Cây', image: 'https://images.unsplash.com/photo-1558961363-a0c6589710db?w=200&q=80', status: 'active' },
+    { id: 'P028', name: 'Xúc xích Vissan', code: '8934563028', category: 'thuc-pham', price: 25000, costPrice: 20000, stock: 50, unit: 'Gói', image: 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=200&q=80', status: 'active' },
+    { id: 'P029', name: 'Phô mai Bò cười', code: '8934563029', category: 'sua', price: 40000, costPrice: 32000, stock: 40, unit: 'Hộp', image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=200&q=80', status: 'active' },
+    { id: 'P030', name: 'Mì Ý', code: '8934563030', category: 'thuc-pham', price: 35000, costPrice: 28000, stock: 0, unit: 'Gói', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=200&q=80', status: 'active' },
+    { id: 'P031', name: 'Cá hộp 3 Cô Gái', code: '8934563031', category: 'thuc-pham', price: 20000, costPrice: 16000, stock: 35, unit: 'Hộp', image: 'https://images.unsplash.com/photo-1611756536067-128cb52b610c?w=200&q=80', status: 'active' }
   ];
 
   const sampleUsers = [
@@ -88,47 +88,8 @@ MiniMart.Data = (function() {
     set(STORAGE_KEYS.USERS, sampleUsers);
     set(STORAGE_KEYS.CUSTOMERS, sampleCustomers);
     
-    // Generate invoices
+    // No mock invoices
     sampleInvoices = [];
-    const now = new Date();
-    for (let i = 0; i < 20; i++) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - Math.floor(Math.random() * 30));
-        d.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60));
-        
-        const invItems = [];
-        const numItems = 1 + Math.floor(Math.random() * 5);
-        let subtotal = 0;
-        for(let j=0; j<numItems; j++) {
-            const prod = sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
-            const qty = 1 + Math.floor(Math.random() * 3);
-            const sub = prod.price * qty;
-            subtotal += sub;
-            invItems.push({ productId: prod.id, name: prod.name, price: prod.price, quantity: qty, subtotal: sub, image: prod.image });
-        }
-        
-        const methods = ['cash', 'transfer', 'ewallet'];
-        const method = methods[Math.floor(Math.random() * 3)];
-        const cust = sampleCustomers[Math.floor(Math.random() * sampleCustomers.length)];
-        
-        sampleInvoices.push({
-            id: 'INV-' + (1000 + i),
-            items: invItems,
-            subtotal: subtotal,
-            discount: 0,
-            discountPercent: 0,
-            total: subtotal,
-            paymentMethod: method,
-            cashReceived: method === 'cash' ? subtotal : 0,
-            change: 0,
-            employeeId: sampleUsers[1].id,
-            employeeName: sampleUsers[1].fullName,
-            createdAt: d.toISOString(),
-            customerId: cust.id,
-            customerName: cust.name
-        });
-    }
-    sampleInvoices.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
     set(STORAGE_KEYS.INVOICES, sampleInvoices);
     set(STORAGE_KEYS.STOCK_ENTRIES, []);
     set(STORAGE_KEYS.INITIALIZED, true);

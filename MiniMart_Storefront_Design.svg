@@ -1,0 +1,82 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Nền Dark Mode -->
+    <rect width="1440" height="900" fill="#0F172A"/>
+
+    <!-- Header Navigation -->
+    <rect width="1440" height="80" fill="#1E293B"/>
+    <text x="40" y="50" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="bold">MiniMart POS</text>
+    
+    <!-- Search Bar -->
+    <rect x="300" y="20" width="500" height="40" rx="8" fill="#334155"/>
+    <text x="320" y="46" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Tìm kiếm sản phẩm...</text>
+    
+    <!-- User Profile / Cart Header -->
+    <rect x="1250" y="20" width="150" height="40" rx="8" fill="#6366F1"/>
+    <text x="1285" y="46" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Giỏ Hàng (3)</text>
+
+    <!-- Sidebar Danh mục -->
+    <rect x="40" y="120" width="250" height="740" rx="12" fill="#1E293B"/>
+    <text x="60" y="160" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Danh mục</text>
+    
+    <rect x="60" y="190" width="210" height="40" rx="8" fill="#334155"/>
+    <text x="80" y="215" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">Tất cả sản phẩm</text>
+    
+    <text x="80" y="270" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Đồ uống</text>
+    <text x="80" y="320" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Bánh kẹo</text>
+    <text x="80" y="370" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Thực phẩm tươi</text>
+    <text x="80" y="420" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Vật dụng gia đình</text>
+
+    <!-- Main Content - Lưới sản phẩm -->
+    <text x="330" y="160" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Sản phẩm nổi bật</text>
+
+    <!-- Product Card 1 -->
+    <rect x="330" y="200" width="280" height="320" rx="16" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <rect x="350" y="220" width="240" height="150" rx="8" fill="#CBD5E1"/>
+    <text x="445" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="14">Image Placeholder</text>
+    <text x="350" y="410" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Nước ngọt Coca Cola</text>
+    <text x="350" y="440" fill="#10B981" font-family="Arial, sans-serif" font-size="16" font-weight="bold">15.000 đ</text>
+    <rect x="520" y="460" width="70" height="36" rx="6" fill="#6366F1"/>
+    <text x="535" y="483" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Thêm</text>
+
+    <!-- Product Card 2 -->
+    <rect x="640" y="200" width="280" height="320" rx="16" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <rect x="660" y="220" width="240" height="150" rx="8" fill="#CBD5E1"/>
+    <text x="755" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="14">Image Placeholder</text>
+    <text x="660" y="410" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Snack Khoai Tây Lays</text>
+    <text x="660" y="440" fill="#10B981" font-family="Arial, sans-serif" font-size="16" font-weight="bold">22.000 đ</text>
+    <rect x="830" y="460" width="70" height="36" rx="6" fill="#6366F1"/>
+    <text x="845" y="483" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Thêm</text>
+
+    <!-- Product Card 3 -->
+    <rect x="950" y="200" width="280" height="320" rx="16" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <rect x="970" y="220" width="240" height="150" rx="8" fill="#CBD5E1"/>
+    <text x="1065" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="14">Image Placeholder</text>
+    <text x="970" y="410" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Mì Hảo Hảo Chua Cay</text>
+    <text x="970" y="440" fill="#10B981" font-family="Arial, sans-serif" font-size="16" font-weight="bold">5.000 đ</text>
+    <rect x="1140" y="460" width="70" height="36" rx="6" fill="#6366F1"/>
+    <text x="1155" y="483" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Thêm</text>
+
+    <!-- Giỏ hàng Sidebar (Right) -->
+    <rect x="1270" y="120" width="300" height="740" rx="12" fill="#1E293B"/>
+    <text x="1290" y="160" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Chi tiết giỏ hàng</text>
+    
+    <!-- Item 1 -->
+    <rect x="1290" y="190" width="260" height="80" rx="8" fill="#334155"/>
+    <text x="1305" y="220" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Coca Cola x 2</text>
+    <text x="1305" y="245" fill="#10B981" font-family="Arial, sans-serif" font-size="14">30.000 đ</text>
+    
+    <!-- Item 2 -->
+    <rect x="1290" y="280" width="260" height="80" rx="8" fill="#334155"/>
+    <text x="1305" y="310" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Snack Lays x 1</text>
+    <text x="1305" y="335" fill="#10B981" font-family="Arial, sans-serif" font-size="14">22.000 đ</text>
+
+    <!-- Tổng tiền -->
+    <rect x="1290" y="700" width="260" height="2" fill="#475569"/>
+    <text x="1290" y="740" fill="#94A3B8" font-family="Arial, sans-serif" font-size="16">Tổng cộng:</text>
+    <text x="1430" y="740" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="20" font-weight="bold">52.000 đ</text>
+
+    <!-- Thanh toán Button -->
+    <rect x="1290" y="780" width="260" height="50" rx="8" fill="#10B981"/>
+    <text x="1340" y="812" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Thanh Toán VietQR</text>
+
+</svg>
