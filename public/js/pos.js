@@ -283,7 +283,35 @@ MiniMart.POS = (function() {
         processPayment(total, subtotal, discountAmount, cashReceived, cashReceived - total);
       });
     } else {
-      processPayment(total, subtotal, discountAmount, total, 0);
+      const bankBin = '970422'; // MBBank BIN as example
+      const bankAccount = '123456789';
+      const accountName = 'MINIMART POS';
+      const addInfo = 'Thanh toan don hang';
+      const qrUrl = `https://img.vietqr.io/image/${bankBin}-${bankAccount}-compact2.png?amount=${total}&addInfo=${encodeURIComponent(addInfo)}&accountName=${encodeURIComponent(accountName)}`;
+      
+      MiniMart.Utils.showModal(`
+        <div class='modal-header'>
+          <h3>📱 Quét mã QR Thanh toán</h3>
+          <button class='modal-close' onclick='MiniMart.Utils.closeModal()'>✕</button>
+        </div>
+        <div class='modal-body' style='text-align: center;'>
+          <p style='margin-bottom:16px'>Khách hàng quét mã QR dưới đây để thanh toán <strong style='color:var(--primary);font-size:20px'>${MiniMart.Utils.formatCurrency(total)}</strong></p>
+          <div style='background: white; padding: 16px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 16px;'>
+            <img src="${qrUrl}" alt="QR Code" style="width: 250px; height: 250px; object-fit: contain; display: block;">
+          </div>
+          <p style='color: var(--text-secondary); font-size: 14px;'>Thu ngân vui lòng kiểm tra thông báo nhận tiền trên điện thoại<br>trước khi bấm Xác nhận.</p>
+        </div>
+        <div class='modal-footer' style='justify-content: center;'>
+          <button class='btn btn-secondary' onclick='MiniMart.Utils.closeModal()'>Hủy bỏ</button>
+          <button class='btn btn-primary' id='confirmQRBtn'>✅ Xác nhận đã nhận tiền</button>
+        </div>
+      `);
+
+      document.getElementById('confirmQRBtn').addEventListener('click', () => {
+        document.getElementById('confirmQRBtn').innerHTML = 'Đang xử lý...';
+        document.getElementById('confirmQRBtn').disabled = true;
+        processPayment(total, subtotal, discountAmount, total, 0);
+      });
     }
   }
 
