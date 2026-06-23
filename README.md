@@ -1,66 +1,48 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MiniMart POS - Hệ thống Quản lý Siêu thị
+Dự án phần mềm quản lý siêu thị MiniMart bao gồm hệ thống Bán hàng tại quầy (POS), quản lý kho, và trang đặt hàng trực tuyến (Storefront).
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+## 🛠 HƯỚNG DẪN CÀI ĐẶT & CHẠY DỰ ÁN (DÀNH CHO MÁY MỚI)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Website này được xây dựng bằng **Laravel Framework (PHP)** và **MySQL**. Bạn **KHÔNG THỂ** chạy dự án bằng cách nhấp đúp vào các file `.html` (hiện `file:///...`). Bạn bắt buộc phải bật máy chủ ảo theo các bước sau:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Bước 1: Cài đặt công cụ môi trường
+Đảm bảo máy tính của bạn đã cài đặt các phần mềm sau:
+- **Laragon** hoặc **XAMPP** (để có PHP và MySQL).
+- **Composer** (Trình quản lý thư viện của PHP).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Bước 2: Tải Source Code & Cài đặt thư viện
+1. Mở Terminal (hoặc CMD/PowerShell).
+2. Di chuyển vào thư mục chứa code vừa tải về (ví dụ: `cd C:\laragon\www\sieuthimini-main`).
+3. Gõ lệnh sau để tải toàn bộ thư viện cần thiết (bước này rất quan trọng vì Github mặc định không lưu thư mục `vendor`):
+   ```bash
+   composer install
+   ```
 
-## Learning Laravel
+### Bước 3: Cấu hình File Môi trường (.env)
+1. Trong thư mục code, copy file `.env.example` và đổi tên thành `.env` (hoặc chạy lệnh: `cp .env.example .env`).
+2. Sinh khóa bảo mật cho dự án bằng lệnh:
+   ```bash
+   php artisan key:generate
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Bước 4: Khôi phục Cơ sở dữ liệu (Database)
+1. Mở phần mềm Laragon/XAMPP, ấn **Start** Apache và MySQL.
+2. Mở phpMyAdmin (hoặc HeidiSQL), tạo một Database rỗng tên là: `minimart_db`.
+3. Có 2 cách để nạp dữ liệu:
+   - **Cách 1 (Dùng file Backup gốc):** Import file `database/minimart_db_backup.sql` trực tiếp vào Database vừa tạo.
+   - **Cách 2 (Dùng lệnh Laravel):** Chạy lệnh `php artisan migrate:fresh --seed` ở Terminal.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Bước 5: Khởi động Máy chủ và Trải nghiệm
+1. Tại màn hình Terminal, gõ lệnh khởi động máy chủ:
+   ```bash
+   php artisan serve
+   ```
+2. Mở trình duyệt Web (Chrome, Edge...) và truy cập chính xác vào các đường link sau:
+   - **Trang dành cho khách hàng:** 👉 `http://127.0.0.1:8000/store.html`
+   - **Trang quản trị (POS):** 👉 `http://127.0.0.1:8000/dashboard.html`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 🔑 Thông tin Đăng nhập Quản trị (Admin)
+- **Tên đăng nhập (Email):** `admin@gmail.com`
+- **Mật khẩu:** `123456`
